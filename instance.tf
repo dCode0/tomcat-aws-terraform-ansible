@@ -141,6 +141,6 @@ resource "aws_instance" "tomcat" {
 }
 
 output "tomcat-public-dns" {
-  value = aws_instance.tomcat.public_dns
+  value = element(aws_instance.tomcat.public_dns, count.index)
 }
 
