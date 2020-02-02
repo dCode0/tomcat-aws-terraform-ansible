@@ -125,7 +125,7 @@ resource "aws_instance" "tomcat" {
   provisioner "remote-exec" {
     inline = [ "echo hello" ]
 
-    connection {
+    connection = {
       type = "ssh"
       user = var.ssh_user
       private_key = file(var.ssh_key_private)
