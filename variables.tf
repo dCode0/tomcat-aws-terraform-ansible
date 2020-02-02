@@ -4,7 +4,7 @@ variable "key_name" {
 
 # amazon linux 2 x86_64
 variable "ami" {
-  default = "ami-0a5e707736615003c"
+  default = "ami-0ff8a91507f77f867"
 }
 
 variable "vpcid" {

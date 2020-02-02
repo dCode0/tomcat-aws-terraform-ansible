@@ -1,5 +1,5 @@
 provider "aws" {
-  region = "eu-west-1"
+  region = "us-east-1"
 }
 # Allowing different workspaces/envs is a good idea
 locals {

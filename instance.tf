@@ -128,6 +128,7 @@ resource "aws_instance" "tomcat" {
     connection {
       type = "ssh"
       user = var.ssh_user
+      host = element(aws_instance.tomcat.*.public_ip, count.index)
       private_key = file(var.ssh_key_private)
     }
 
