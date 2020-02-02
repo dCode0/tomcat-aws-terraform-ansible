@@ -24,7 +24,7 @@ EOF
 
 resource "aws_iam_role_policy" "s3" {
   name = "S3${var.s3bucket}-${local.sk}-${random_id.x.dec}"
-  role = "${aws_iam_role.ec2.name}"
+  role = aws_iam_role.ec2.name
 
   policy = <<EOF
 {
@@ -62,14 +62,14 @@ EOF
 
 resource "aws_iam_instance_profile" "ec2" {
   name = "S3${var.s3bucket}-${local.sk}-${random_id.x.dec}"
-  role = "${aws_iam_role.ec2.name}"
+  role = aws_iam_role.ec2.name
 }
 
 resource "aws_security_group" "tomcat" {
   name = "${local.sk}-${random_id.x.dec}"
   description = "http:8080 and ssh access."
 
-  vpc_id = "${var.vpcid}"
+  vpc_id = var.vpcid
 
   # HTTP:8080 access from anywhere
   ingress {
@@ -95,27 +95,27 @@ resource "aws_security_group" "tomcat" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  tags {
+  tags = {
     Name = "${local.sk}-${random_id.x.dec}"
   }
 }
 
 resource "aws_instance" "tomcat" {
   count = "1"
-  instance_type = "${var.inst_type}"
+  instance_type = var.inst_type
 
   # Iam role allowing access to the s3 bucket to cp the java rpm
-  iam_instance_profile = "${aws_iam_instance_profile.ec2.name}"
+  iam_instance_profile = aws_iam_instance_profile.ec2.name
 
-  ami = "${var.ami}"
+  ami = var.ami
 
-  key_name = "${var.key_name}"
+  key_name = var.key_name
 
-  vpc_security_group_ids = ["${aws_security_group.tomcat.id}"]
-  subnet_id              = "${element(var.subnets,count.index)}"
+  vpc_security_group_ids = [aws_security_group.tomcat.id]
+  subnet_id              = element(var.subnets,count.index)
 
   #Instance tags
-  tags {
+  tags = {
     Name = "${local.sk}-0"
   }
 
@@ -127,8 +127,8 @@ resource "aws_instance" "tomcat" {
 
     connection {
       type = "ssh"
-      user = "${var.ssh_user}"
-      private_key = "${file(var.ssh_key_private)}"
+      user = var.ssh_user
+      private_key = file(var.ssh_key_private)
     }
   }
 
@@ -139,6 +139,6 @@ resource "aws_instance" "tomcat" {
 }
 
 output "tomcat-public-dns" {
-  value = "${aws_instance.tomcat.public_dns}"
+  value = aws_instance.tomcat.public_dns
 }
 

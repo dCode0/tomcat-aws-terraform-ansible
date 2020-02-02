@@ -20,7 +20,7 @@ variable "inst_type" {
 }
 
 variable "s3bucket" {
-  default = "mybucket"
+  default = "mybucketdcode"
 }
 
 # Access the ec2 instance remotely to run ansible; user and key:
